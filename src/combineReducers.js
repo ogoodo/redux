@@ -46,6 +46,9 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
   }
 }
 
+/**
+ * 检测确定redcers里的子项都会返回{}对象
+ */
 function assertReducerSanity(reducers) {
   Object.keys(reducers).forEach(key => {
     var reducer = reducers[key]
@@ -90,7 +93,11 @@ function assertReducerSanity(reducers) {
  * @returns {Function} A reducer function that invokes every reducer inside the
  * passed object, and builds a state object with the same shape.
  */
+ /**
+  * 
+  */
 export default function combineReducers(reducers) {
+  //确定传入的都是function
   var reducerKeys = Object.keys(reducers)
   var finalReducers = {}
   for (var i = 0; i < reducerKeys.length; i++) {
