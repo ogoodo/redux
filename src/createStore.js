@@ -36,11 +36,13 @@ export var ActionTypes = {
  * and subscribe to changes.
  */
 export default function createStore(reducer, initialState, enhancer) {
+  //验证参数, 设定第二个参数可以是回调函数, 会赋值给第三个参数
   if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
     enhancer = initialState
     initialState = undefined
   }
-
+  
+  //如果传入了函数参数, 则会到这里执行完成
   if (typeof enhancer !== 'undefined') {
     if (typeof enhancer !== 'function') {
       throw new Error('Expected the enhancer to be a function.')
@@ -54,7 +56,7 @@ export default function createStore(reducer, initialState, enhancer) {
   }
 
   var currentReducer = reducer
-  var currentState = initialState
+  var currentState = initialState //整个程序存储数据的根      重点
   var currentListeners = []
   var nextListeners = currentListeners
   var isDispatching = false
@@ -97,6 +99,8 @@ export default function createStore(reducer, initialState, enhancer) {
    * @param {Function} listener A callback to be invoked on every dispatch.
    * @returns {Function} A function to remove this change listener.
    */
+   // 订阅消息
+   // 其实就是要入一个队列, 返回一个可以取消订阅的函数
   function subscribe(listener) {
     if (typeof listener !== 'function') {
       throw new Error('Expected listener to be a function.')
@@ -166,7 +170,7 @@ export default function createStore(reducer, initialState, enhancer) {
 
     try {
       isDispatching = true
-      currentState = currentReducer(currentState, action)
+      currentState = currentReducer(currentState, action)       //传入老的state树和action, 返回新的state树, 然后存储在currentState   重点
     } finally {
       isDispatching = false
     }
