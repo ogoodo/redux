@@ -29,7 +29,8 @@ export default function applyMiddleware(...middlewares) {
     }
     //使得传入的中间件每个都调用下
     chain = middlewares.map(middleware => middleware(middlewareAPI))
-    //这句还不知道做啥子        重要        重要        重要
+    //这句还不知道做啥子(这里好像是第二次调用中间件)        重要        重要        重要
+    //中间件有3此科里化
     dispatch = compose(...chain)(store.dispatch)
 
     return {
