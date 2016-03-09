@@ -47,7 +47,7 @@ function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
 }
 
 /**
- * 检测确定redcers里的子项都会返回{}对象
+ * 检测确定reducers里的子项都会返回{}对象
  */
 function assertReducerSanity(reducers) {
   Object.keys(reducers).forEach(key => {
@@ -115,6 +115,9 @@ export default function combineReducers(reducers) {
     sanityError = e
   }
 
+  //返回一个合并和兼容reducer规范的纯函数
+  //调用此返回函数后,  会循环调用合并的reducer
+  //@return 层层调用reducer后, 会生成一个tree型的state返回
   return function combination(state = {}, action) {
     if (sanityError) {
       throw sanityError
@@ -133,6 +136,7 @@ export default function combineReducers(reducers) {
       var key = finalReducerKeys[i]
       var reducer = finalReducers[key]
       var previousStateForKey = state[key]
+      //取出老state, 结合action调用reducer会返回一个新state
       var nextStateForKey = reducer(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
         var errorMessage = getUndefinedStateErrorMessage(key, action)
