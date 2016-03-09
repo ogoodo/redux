@@ -26,7 +26,9 @@ export default function applyMiddleware(...middlewares) {
       getState: store.getState,
       dispatch: (action) => dispatch(action)
     }
+    //使得传入的中间件每个都调用下
     chain = middlewares.map(middleware => middleware(middlewareAPI))
+    //这句还不知道做啥子        重要        重要        重要
     dispatch = compose(...chain)(store.dispatch)
 
     return {
