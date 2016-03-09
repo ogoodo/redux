@@ -55,8 +55,10 @@ export default function createStore(reducer, initialState, enhancer) {
     throw new Error('Expected the reducer to be a function.')
   }
 
-  var currentReducer = reducer
-  var currentState = initialState //整个程序存储数据的根      重点
+  var currentReducer = reducer、
+  //整个程序存储数据的根       重点       重点       重点
+  //数据结构是初始化出入的, 或者根据reducer层层调用的树结构
+  var currentState = initialState 
   var currentListeners = []
   var nextListeners = currentListeners
   var isDispatching = false
@@ -170,11 +172,13 @@ export default function createStore(reducer, initialState, enhancer) {
 
     try {
       isDispatching = true
-      currentState = currentReducer(currentState, action)       //传入老的state树和action, 返回新的state树, 然后存储在currentState   重点
+      //传入老的state树和action, 返回新的state树, 然后存储在currentState     重点     重点     重点
+      currentState = currentReducer(currentState, action)      
     } finally {
       isDispatching = false
     }
 
+    //广播给所有订阅的对象, 状态变了
     var listeners = currentListeners = nextListeners
     for (var i = 0; i < listeners.length; i++) {
       listeners[i]()
@@ -193,6 +197,7 @@ export default function createStore(reducer, initialState, enhancer) {
    * @param {Function} nextReducer The reducer for the store to use instead.
    * @returns {void}
    */
+   //简单替换, 然后发个广播消息
   function replaceReducer(nextReducer) {
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function.')
