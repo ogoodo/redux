@@ -38,6 +38,8 @@ export default function applyMiddleware(...middlewares) {
     // 第二次调用中间件， 传入(绑定)中间件递归调用的next参数(闭包参数), 给最终函数做递归调用(能现实中间件one by one的调用， 通过next(action)这样子调用)
     // compose创建一个包括一组异步函数的函数集合，每个函数会消费上一次函数的返回值， 执行顺序是从右边函数往左执行
     // 返回的dispatch是个函数, 如果调用dispatch()， 就会从数组的左边向右边执行每个中间件最终的函数(即最底层带action参数的那个函数)
+    // 假设中间件数组(...chain)是[fn1, fn2, fn3]
+    // 那么结果就是dispatch=fn1(fn2(fn3(store.dispatch)))
     dispatch = compose(...chain)(store.dispatch)
 
     return {
